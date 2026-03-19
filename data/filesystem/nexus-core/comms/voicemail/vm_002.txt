@@ -1,0 +1,55 @@
+╔══════════════════════════════════════════════════════╗
+║  VOICEMAIL TRANSCRIPT                                 ║
+╚══════════════════════════════════════════════════════╝
+
+  Recipient: VOSS, K.  (ext. 7031)
+  Caller:    CHEN, R.   (EXTERNAL -- darkmail relay)
+  Date:      2026-03-14 01:22:08
+  Duration:  1:17
+
+BEGIN TRANSCRIPT:
+-----
+
+Kai, it's River. I don't have much time.
+
+I hid the proof in the archive. Everything Sable doesn't
+want the world to see -- the subject files, the real
+budget, the acquisition records, the mortality reports.
+All of it. It's compressed in deep storage under the
+classified directory. Find it. Please.
+
+Listen carefully. The archive is behind a firewall now.
+Sable locked it down after she caught me. But the
+firewall rules are on the nexus-core server, in the
+security directory. You can see the config and figure
+out how to disable it. It's Sable's personal rule --
+she's the one who ordered the block.
+
+Once you're in the archive, there's something else you
+need to find. River... no, I need you to find MY files.
+Not my employee record. My real notes. The ones about
+you. About what they did to you. Because Kai...
+
+[voice breaking]
+
+You're not who you think you are. The "Kai Voss" they
+hired? That's a template. A fabrication they wrote into
+someone else's brain. The real you... the person under
+the template... they came here to stop this. You were
+investigating Omnicron. You were a journalist. You were
+MY SOURCE.
+
+And Sable found out and she made you Subject 031.
+
+I left a backdoor into lab-9 on the archive server. It's
+hidden. You'll need to look for it. That's where the door
+controls are. That's how you get out of Room 31.
+
+I'm sorry. I'm so sorry, Kai. I tried to stop them.
+REMEMBER. Please remember.
+
+-----
+END TRANSCRIPT
+
+[SYSTEM NOTE: This voicemail was flagged by security
+monitoring but not deleted. Likely an oversight.]

@@ -1,0 +1,83 @@
+╔══════════════════════════════════════════════════════╗
+║  SECURITY CAMERA LOG -- LAB-9 (FLOOR 9)              ║
+║  Date Range: 2026-03-13 22:00 to 2026-03-14 04:00    ║
+║  Cameras: L9-CORR-01, L9-PREP-01, L9-RM31-01         ║
+╚══════════════════════════════════════════════════════╝
+
+[L9-CORR-01] 2026-03-13 22:12:04
+  Motion detected. Individual: CHEN, R. (ID: RC-4471)
+  Direction: Toward server room. Carrying laptop bag.
+  NOTE: CHEN's keycard should be REVOKED. System error?
+
+[L9-CORR-01] 2026-03-13 22:14:30
+  CHEN, R. enters server room. Door log confirms access.
+
+[L9-CORR-01] 2026-03-13 23:45:11
+  CHEN, R. exits server room. Appears distressed.
+  Moving quickly toward emergency stairs.
+
+[L9-CORR-01] 2026-03-13 23:47:22
+  CHEN, R. reaches Floor 9 emergency exit.
+  ALERT: Emergency exit triggered.
+
+[L9-CORR-01] 2026-03-13 23:48:05
+  Security team (2 personnel) in pursuit.
+  Lt. BRIGGS, M. leading.
+
+[L9-CORR-01] 2026-03-13 23:52:18
+  Security returns. No CHEN visible.
+  Lt. BRIGGS on radio: "Target contained. Parking level."
+
+[L9-CORR-01] 2026-03-14 00:15:00
+  No further motion. Corridor clear.
+
+--- GAP IN RECORDING: 00:15 to 02:10 ---
+--- REASON: Director override. Cameras disabled. ---
+
+[L9-CORR-01] 2026-03-14 02:10:44
+  Cameras re-enabled by system automation.
+  Individual: SABLE, E. (ID: ES-0001)
+  With: Lt. BRIGGS, M. and 2 unidentified personnel.
+  Transporting: Gurney. Occupant appears unconscious.
+
+[L9-PREP-01] 2026-03-14 02:12:33
+  Gurney wheeled into Preparation Room.
+  Occupant: Male, approx 30s. Matches build of VOSS, K.
+  SABLE overseeing. Issuing verbal instructions.
+
+[L9-PREP-01] 2026-03-14 02:13:45
+  Neural interface headset being fitted to occupant.
+  SABLE: [audio captured] "Start the procedure. Full erasure.
+    Template v2.1. I want him clean by morning."
+
+[L9-PREP-01] 2026-03-14 02:14:22
+  LETHE MODULE activated. Procedure commencing.
+  Occupant vitals: Stable. Brain activity: Suppressed.
+
+[L9-RM31-01] 2026-03-14 02:47:00
+  Occupant transferred from Prep to Room 31.
+  Still unconscious. Neural interface remains attached.
+  Terminal NX7-031 powered on in room.
+
+[L9-RM31-01] 2026-03-14 03:15:01
+  ALERT: Neural interface reports resistance spike.
+  Occupant showing involuntary movement.
+  Vitals: Heart rate 142. BP 160/95.
+
+[L9-RM31-01] 2026-03-14 03:18:33
+  SYSTEM EMERGENCY. LETHE module crash.
+  Neural interface emergency disconnect.
+  Occupant: Unconscious but stable.
+
+[L9-RM31-01] 2026-03-14 03:28:16
+  Occupant regaining consciousness.
+  Appears disoriented. Looking at hands.
+  Approaching terminal.
+
+[L9-RM31-01] 2026-03-14 03:28:35
+  Occupant begins typing at terminal.
+
+--- CURRENT FEED ---
+  Subject is actively using terminal NX7-031.
+  Status: AWAKE. Identity template: DEGRADING.
+  Automated alert sent to Director Sable.

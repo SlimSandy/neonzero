@@ -1,0 +1,53 @@
+============================================================
+  NEXUS-7 ERROR LOG -- Terminal NX7-031
+  Filter: CRITICAL, ERROR, WARNING
+============================================================
+
+[2026-03-14 02:14:25] CRITICAL  kernel/neural_drv: Neural interface driver loaded in OVERRIDE mode
+[2026-03-14 02:14:25] CRITICAL  kernel/neural_drv: Safety interlocks BYPASSED by Director authorization
+[2026-03-14 02:14:26] WARNING   kernel/neural_drv: Subject consciousness level: MINIMAL -- Proceeding
+[2026-03-14 02:14:30] ERROR     lethe/core: LETHE_COGNITIVE_MODULE initialization error -- config mismatch
+[2026-03-14 02:14:30] WARNING   lethe/core: Falling back to default erasure parameters
+[2026-03-14 02:14:31] ERROR     lethe/memory_map: Unable to fully index hippocampal structures
+[2026-03-14 02:14:31] WARNING   lethe/memory_map: Subject 031 neural topology exceeds standard deviation by 2.7x
+[2026-03-14 02:47:15] WARNING   lethe/erasure: Phase 1 complete -- anomalous memory clusters detected
+[2026-03-14 02:47:16] WARNING   lethe/erasure: Clusters tagged for manual review: 14
+[2026-03-14 02:47:16] ERROR     lethe/erasure: Cluster 7 shows recursive protection -- possible self-encrypted memory
+[2026-03-14 03:12:44] WARNING   lethe/template: Identity template VOSS_KAI_v2.1 loading...
+[2026-03-14 03:12:45] ERROR     lethe/template: Template overlay encountering resistance at memory layer 3
+[2026-03-14 03:12:46] ERROR     lethe/template: Template overlay encountering resistance at memory layer 5
+[2026-03-14 03:12:47] ERROR     lethe/template: Template overlay encountering resistance at memory layer 8
+[2026-03-14 03:15:01] CRITICAL  kernel/neural_drv: Neural resistance spike -- 847mV (threshold: 200mV)
+[2026-03-14 03:15:01] CRITICAL  kernel/neural_drv: Emergency dampeners engaged
+[2026-03-14 03:15:02] ERROR     lethe/core: LETHE_COGNITIVE_MODULE -- Cascade interrupt detected
+[2026-03-14 03:15:02] ERROR     lethe/core: Subject brainwave pattern deviation: 340% above baseline
+[2026-03-14 03:15:03] CRITICAL  kernel/neural_drv: KERNEL PANIC -- Neural interface feedback loop
+[2026-03-14 03:15:03] CRITICAL  kernel/neural_drv: Stack trace:
+                        at lethe_core::erasure::execute_phase2()
+                        at lethe_core::template::overlay_identity()
+                        at neural_drv::interface::write_cognitive_data()
+                        at neural_drv::interface::handle_resistance()
+                        at kernel::panic::halt_and_catch_fire()
+[2026-03-14 03:15:04] CRITICAL  lethe/core: PROCEDURE ABORT -- Incomplete erasure state
+[2026-03-14 03:15:04] CRITICAL  lethe/core: Memory state: INDETERMINATE
+[2026-03-14 03:15:05] CRITICAL  lethe/core: Subject 031 -- original memories: PARTIALLY INTACT
+[2026-03-14 03:15:05] CRITICAL  lethe/core: Subject 031 -- template overlay: PARTIAL (est. 67%)
+[2026-03-14 03:15:06] ERROR     lethe/core: LETHE_COGNITIVE_MODULE entering safe mode
+[2026-03-14 03:18:33] CRITICAL  kernel: System instability detected -- forcing reboot
+[2026-03-14 03:18:34] ERROR     kernel: Memory corruption detected in /proc/neural/identity
+[2026-03-14 03:18:34] ERROR     kernel: Core dump saved to /local/logs/crash_031.dmp
+[2026-03-14 03:18:35] CRITICAL  kernel: EMERGENCY REBOOT
+
+--- POST-REBOOT ERRORS ---
+
+[2026-03-14 03:28:07] WARNING   lethe/core: LETHE_COGNITIVE_MODULE integrity check FAILED
+[2026-03-14 03:28:08] ERROR     lethe/core: Template hash verification: MISMATCH
+[2026-03-14 03:28:08] ERROR     lethe/core: Cognitive template degradation detected: 12.3%
+[2026-03-14 03:28:09] WARNING   lethe/core: Automatic repair attempted -- FAILED
+[2026-03-14 03:28:09] ERROR     lethe/core: Subject showing signs of pre-procedure memory emergence
+[2026-03-14 03:28:10] CRITICAL  lethe/core: ALERT -- Identity template is UNSTABLE and DEGRADING
+[2026-03-14 03:28:10] CRITICAL  lethe/core: Manual intervention required -- Director Sable notified
+[2026-03-14 03:28:11] WARNING   kernel/neural_drv: Neural interface in passive monitoring mode
+[2026-03-14 03:28:11] WARNING   kernel/neural_drv: Subject neural activity: ELEVATED
+[2026-03-14 03:28:12] ERROR     kernel/neural_drv: Pre-procedure memory traces detected in active cognition
+[2026-03-14 03:28:12] ERROR     kernel/neural_drv: Estimated time to full template collapse: 4-6 HOURS

@@ -1,0 +1,65 @@
+╔══════════════════════════════════════════════════════╗
+║  LAB-9 SURVEILLANCE SYSTEM -- ROOM 31 LIVE FEED      ║
+║  Camera: L9-RM31-01 (Ceiling, Wide Angle)             ║
+║  Subject: 031 (VOSS, K. -- template DEGRADING)        ║
+╚══════════════════════════════════════════════════════╝
+
+STATUS: ██ LIVE ██  |  RECORDING: YES  |  ALERT: CRITICAL
+
+--- RECENT ACTIVITY LOG ---
+
+[03:28:16] Subject regained consciousness. Sat up on cot.
+  Vitals: HR 88, BP 130/82, Temp 37.2C
+  Neural activity: ELEVATED -- fragments of original
+    personality patterns detected
+
+[03:28:20] Subject looked at hands for 14 seconds.
+  Behavioral analysis: Confusion, disorientation.
+  Template integrity: 67.4% (declining 0.2%/hour)
+
+[03:28:35] Subject approached terminal NX7-031.
+  Began typing. First command: ls
+  Assessment: Subject is exploring. Template-consistent
+    behavior (Voss profile includes technical aptitude).
+
+[03:32:15] Subject accessed desktop/README.txt
+  NOTE: This file was planted by a pre-procedure version
+    of the subject. Sable was notified but chose not to
+    remove it. Quote: "Let them chase their tail. The door
+    is locked. Where are they going to go?"
+
+[03:45:22] Subject accessed email. Reading inbox messages.
+  Behavioral analysis: Growing agitation. HR elevated to 102.
+  Original personality emergence markers: 3 of 7 triggered.
+
+[03:58:41] Subject discovered .deleted directory.
+  ALERT: Subject is following the breadcrumb trail left by
+    Dr. Chen. This was anticipated. Door remains locked.
+    Sable has been notified.
+
+[CURRENT] Subject is actively exploring the terminal.
+  Template integrity: 66.8% and falling.
+  Estimated time to full collapse: 3-4 hours.
+  NOTE: If template collapses, subject will regain full
+    original memories. Security team on standby.
+
+--- ROOM 31 SPECIFICATIONS ---
+
+  Dimensions:    3m x 4m
+  Door:          Electromagnetic lock, passphrase-protected
+  Ventilation:   Filtered air, centrally controlled
+  Temperature:   21C (automated)
+  Lighting:      Fluorescent, no windows
+  Contents:      1x cot, 1x terminal (NX7-031), 1x chair
+  Cameras:       1x ceiling-mounted (this feed)
+  Microphones:   2x (wall-mounted, hidden)
+
+  Door status:   LOCKED
+  Next scheduled event: FULL COGNITIVE WIPE -- 0600 tomorrow
+  Personnel assigned: Dir. Sable, Lt. Briggs, Dr. Okafor
+
+╔══════════════════════════════════════════════════════╗
+║  SUBJECT IS BEING OBSERVED IN REAL TIME               ║
+║  ALL ACCESS TO THIS FEED IS LOGGED                    ║
+║  AUTOMATED ALERT: DIRECTOR SABLE NOTIFIED             ║
+╚══════════════════════════════════════════════════════╝

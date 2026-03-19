@@ -1,0 +1,54 @@
+╔══════════════════════════════════════════════════════╗
+║  PROJECT LETHE -- SUBJECT OUTCOME SUMMARY             ║
+║  Subjects 001-031  |  Phase 1 & 2                     ║
+╚══════════════════════════════════════════════════════╝
+
+#    ACQ.METHOD   PROCEDURE      TEMPLATE STATUS   ALIVE?
+---  ----------   -----------    ----------------   ------
+001  Voluntary    Full Erasure   Stable (98%)       YES
+002  Voluntary    Full Erasure   Stable (95%)       YES
+003  Voluntary    Full Erasure   Stable (91%)       YES
+004  Voluntary    Full Erasure   CASCADE FAILURE    DEAD
+005  Corporate    Full Erasure   Stable (88%)       YES
+006  Corporate    Full Erasure   Stable (93%)       YES
+007  Corporate    Partial Only   Stable (82%)       YES
+008  Government   Full Erasure   Stable (90%)       YES
+009  Government   Full Erasure   CASCADE FAILURE    DEAD
+010  Corporate    Full Erasure   Stable (87%)       YES
+011  Corporate    Full Erasure   Stable (94%)       YES
+012  Opportunity  Full Erasure   Degrading (71%)    YES
+013  Opportunity  Full Erasure   Stable (89%)       YES
+014  Corporate    Full Erasure   Stable (92%)       YES
+015  Government   Full Erasure   CASCADE FAILURE    DEAD
+016  Voluntary    Full Erasure   Stable (96%)       YES
+017  Opportunity  Full Erasure   CASCADE FAILURE    DEAD
+018  Corporate    Full Erasure   Stable (85%)       YES
+019  Corporate    Full Erasure   Stable (91%)       YES
+020  Voluntary    Full Erasure   Stable (93%)       YES
+021  Corporate    Full Erasure   Stable (88%)       YES
+022  Government   Full Erasure   CASCADE FAILURE    DEAD
+023  Corporate    Full Erasure   Stable (97%)       YES
+024  Corporate    Full Erasure   Stable (90%)       YES
+025  Opportunity  Full Erasure   Stable (86%)       YES
+026  Opportunity  Full Erasure   CASCADE FAILURE    DEAD
+027  Corporate    Full Erasure   Stable (92%)       YES
+028  Government   Full Erasure   Stable (89%)       YES
+029  Opportunity  Full Erasure   CASCADE FAILURE    DEAD
+030  Corporate    Full Erasure   Stable (94%)       YES
+031  Opportunity  INCOMPLETE     DEGRADING (67%)    YES*
+
+TOTALS:
+  Subjects processed: 31
+  Successful erasures: 23 (74.2%)
+  Fatalities: 7 (22.6%)
+  Active/Incomplete: 1 (Subject 031)
+
+  * Subject 031 procedure failed. Rescheduled.
+
+╔══════════════════════════════════════════════════════╗
+║  ACQUISITION METHODS:                                 ║
+║  Voluntary  = Informed consent (heavily redacted)     ║
+║  Corporate  = Internal disciplinary referral          ║
+║  Government = AEGIS program referral                  ║
+║  Opportunity = Involuntary acquisition                ║
+╚══════════════════════════════════════════════════════╝

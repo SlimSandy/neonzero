@@ -1,0 +1,53 @@
+╔══════════════════════════════════════════════════════╗
+║  OMNICRON INDUSTRIES -- TRANSACTION LOG               ║
+║  Account: OI-SPECIAL-PROJECTS-7                       ║
+║  Filter: External/Offshore Only                       ║
+╚══════════════════════════════════════════════════════╝
+
+DATE         AMOUNT        DESTINATION                      REF         DESCRIPTION
+----------   -----------   ------------------------------   ---------   ---------------------
+2025-01-15   $2,400,000    AEGIS Defense Corp (VA, USA)     GOV-0187    "Consulting services"
+2025-02-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0043     "Equipment lease"
+2025-03-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0044     "Equipment lease"
+2025-03-15   $5,100,000    AEGIS Defense Corp (VA, USA)     GOV-0201    "Phase 2 milestone"
+2025-04-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0045     "Equipment lease"
+2025-05-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0046     "Equipment lease"
+2025-05-20   $1,200,000    Prometheus BioTech (Panama)      PB-0019     "Biological samples"
+2025-06-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0047     "Equipment lease"
+2025-06-15   $3,300,000    AEGIS Defense Corp (VA, USA)     GOV-0215    "Consulting services"
+2025-07-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0048     "Equipment lease"
+2025-08-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0049     "Equipment lease"
+2025-08-12   $950,000      Prometheus BioTech (Panama)      PB-0023     "Specimen disposal"
+2025-09-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0050     "Equipment lease"
+2025-09-30   $4,700,000    AEGIS Defense Corp (VA, USA)     GOV-0228    "Phase 2 milestone"
+2025-10-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0051     "Equipment lease"
+2025-10-15   $1,800,000    Prometheus BioTech (Panama)      PB-0027     "Biological samples"
+2025-11-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0052     "Equipment lease"
+2025-12-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0053     "Equipment lease"
+2026-01-01   $800,000      NovaMind Holdings (Cayman Is.)   NM-0054     "Equipment lease"
+2026-01-15   $6,200,000    AEGIS Defense Corp (VA, USA)     GOV-0241    "Phase 3 planning"
+2026-02-01   $1,000,000    NovaMind Holdings (Cayman Is.)   NM-0055     "Equipment lease"
+2026-02-20   $2,100,000    Prometheus BioTech (Panama)      PB-0031     "Specimen disposal"
+2026-03-01   $1,000,000    NovaMind Holdings (Cayman Is.)   NM-0056     "Equipment lease"
+
+══════════════════════════════════════════════════════════
+NOTES:
+══════════════════════════════════════════════════════════
+- NovaMind Holdings: Shell company. Registered agent is
+  Elena Sable's brother-in-law, Viktor Sable. No
+  employees. No physical office. $800K/month for
+  "equipment" that doesn't exist.
+
+- Prometheus BioTech: "Biological samples" and "specimen
+  disposal" correspond exactly to dates of subject
+  fatalities. Subject 004 died 2025-05-18. $1.2M to
+  Prometheus two days later. Coincidence? No.
+
+- AEGIS Defense Corp: Government defense contractor.
+  Payments track to a classified DoD program. LETHE
+  technology is being developed for military
+  applications. This was never disclosed to researchers.
+
+TOTAL OFFSHORE: $38,550,000
+  Of which estimated FRAUD: $12,800,000 (NovaMind)
+  Of which estimated COVER-UP: $6,050,000 (Prometheus)

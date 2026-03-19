@@ -1,0 +1,74 @@
+╔══════════════════════════════════════════════════════╗
+║    PROJECT LETHE -- SUBJECT FILE                      ║
+║    CLASSIFICATION: LEVEL 5 -- DIRECTOR ONLY           ║
+╚══════════════════════════════════════════════════════╝
+
+SUBJECT DESIGNATION:  031
+ASSIGNED IDENTITY:    Voss, Kai (template v2.1)
+ORIGINAL IDENTITY:   [SEE BACKUP RECORD]
+STATUS:              PROCEDURE IN PROGRESS
+ACQUISITION METHOD:  Category (d) -- "Opportunity"
+DATE ACQUIRED:       2026-03-14 01:35
+
+═══════════════════════════════════════════════════
+
+SUBJECT BACKGROUND:
+  Subject 031 was originally an investigative journalist
+  who had been gathering evidence against Omnicron
+  Industries for approximately 4 months. Subject made
+  contact with Dr. River Chen (internal asset) and was
+  feeding information to an unknown external contact
+  (handle: "ZERO").
+
+  Subject was identified by corporate security in
+  December 2025. Rather than terminate the investigation
+  externally (risk of exposure), Director Sable
+  authorized a long-term infiltration strategy:
+
+  Subject was recruited to Omnicron under the fabricated
+  identity "Dr. Kai Voss" using a partial LETHE
+  procedure (memory suppression, not full erasure).
+  Subject's journalistic instincts and intelligence
+  were preserved to maintain cover. Subject believed
+  themselves to be a genuine employee.
+
+  However, Subject 031's original memories began
+  surfacing in Q1 2026, likely triggered by interaction
+  with Dr. Chen, who recognized behavioral patterns
+  inconsistent with the implanted template.
+
+PROCEDURE LOG:
+  2025-09-14  Partial cognitive suppression (memories only)
+  2025-09-15  Template overlay: "Kai Voss" v1.0
+  2025-09-15  Subject integrated as employee (Level 4)
+  2026-03-14  Full cognitive erasure authorized (v2.1)
+  2026-03-14  Procedure initiated: 02:14
+  2026-03-14  Procedure FAILED: 03:15 (neural resistance)
+  2026-03-14  Template status: PARTIAL (67%)
+  2026-03-14  Subject status: CONSCIOUS, IDENTITY UNSTABLE
+
+PSYCHOLOGICAL PROFILE:
+  Pre-procedure: Determined, ethical, stubborn.
+  Post-initial suppression: Compliant, curious, trusting.
+  Current (post-failure): INDETERMINATE. Original
+    personality traits may be resurfacing. Subject may
+    retain fragments of both identities.
+
+RECOMMENDATION (Dir. Sable):
+  "Full wipe must be completed before template degrades
+  further. Schedule for 0600 tomorrow. If template
+  collapses entirely and original identity reasserts,
+  subject will remember everything. Including Chen.
+  Including us. This cannot be allowed to happen."
+
+═══════════════════════════════════════════════════
+
+RELATED FILES:
+  - Original identity record: backups/deleted_records/
+  - Acquisition authorization: Protocol 7 file (sealed)
+  - Dr. Chen investigation: classified/lethe/chen_notes/
+
+╔══════════════════════════════════════════════════════╗
+║  HANDLE WITH EXTREME CAUTION                          ║
+║  SUBJECT IS ALIVE AND POTENTIALLY ACCESSING SYSTEMS   ║
+╚══════════════════════════════════════════════════════╝

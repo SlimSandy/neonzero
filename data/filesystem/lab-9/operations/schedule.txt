@@ -1,0 +1,52 @@
+╔══════════════════════════════════════════════════════╗
+║  LAB-9 OPERATIONS -- PROCEDURE SCHEDULE               ║
+║  Week of 2026-03-14                                   ║
+╚══════════════════════════════════════════════════════╝
+
+DATE         TIME    ROOM   SUBJECT   PROCEDURE           STAFF
+-----------  ------  -----  --------  ------------------  -----------
+2026-03-14   06:00   31     031       FULL COGNITIVE WIPE Dir. Sable
+                                                          Dr. Okafor
+                                                          Lt. Briggs
+
+2026-03-14   10:00   12     NEW-01    INTAKE & MAPPING    Dr. Okafor
+
+2026-03-14   14:00   08     025       TEMPLATE CHECKUP    Dr. Okafor
+
+2026-03-15   09:00   31     031       TEMPLATE INSTALL    Dir. Sable
+                                       (v2.1 -- clean)    Dr. Okafor
+
+2026-03-15   14:00   31     031       BEHAVIORAL ASSESS   Dr. Okafor
+
+2026-03-16   09:00   31     031       REINTEGRATION       HR/Security
+                                       (return to Floor 7)
+
+═══════════════════════════════════════════════════════
+
+NOTES ON SUBJECT 031 PROCEDURE:
+
+  The previous attempt (2026-03-14, 02:14) resulted in
+  cascading failure due to anomalous neural resistance.
+  Template overlay reached only 67% before system crash.
+
+  Second attempt will use ENHANCED PROTOCOL:
+    - Higher voltage neural dampening (400mV threshold)
+    - Pre-procedure sedation (IV, not gas)
+    - Extended erasure window (4 hours vs 1 hour)
+    - Complete erasure before template overlay begins
+
+  Director Sable's note:
+    "No more half measures. Full wipe. I want every trace
+    of the journalist gone. Every memory of Chen gone.
+    Every investigative instinct burned out. When 031
+    wakes up, he will be Kai Voss and NOTHING else.
+    Schedule it for 0600. I want this done before the
+    board meeting at 0900."
+
+  TIME REMAINING UNTIL PROCEDURE: [SYSTEM CLOCK]
+
+╔══════════════════════════════════════════════════════╗
+║  ██ WARNING: SUBJECT 031 IS ACCESSING THIS SERVER ██ ║
+║  AUTOMATED LOCKOUT IN: DISABLED (Dir. Sable order)   ║
+║  "Let them see. It changes nothing." -- E. Sable      ║
+╚══════════════════════════════════════════════════════╝

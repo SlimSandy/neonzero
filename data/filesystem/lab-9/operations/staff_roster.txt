@@ -1,0 +1,33 @@
+╔══════════════════════════════════════════════════════╗
+║  LAB-9 -- CURRENT STAFF ROSTER                        ║
+║  Shift: OVERNIGHT (2200 - 0600)                       ║
+╚══════════════════════════════════════════════════════╝
+
+ON SITE:
+  Dir. Elena Sable      -- Director's quarters (Floor 9)
+    Status: RESTING. Auto-alert set for 0545.
+
+  Lt. Marcus Briggs     -- Security office (Floor 9)
+    Status: ON PATROL. Current location: Parking level.
+
+  Dr. Amara Okafor      -- Lab 3 (Floor 9)
+    Status: MONITORING Subject 031 remotely.
+
+  Security Guard (2x)   -- Main entrance, Floor 9 corridor
+    Status: ON DUTY.
+
+OFF SITE (returning at 0600):
+  Medical technician (1x)
+  Neural interface operator (1x)
+
+NOTES:
+  - Skeleton crew tonight. Most staff sent home after
+    the incident with Subject 031.
+  - Lt. Briggs doing rounds. Returns to security office
+    every 45 minutes. Currently on parking level patrol.
+  - Main entrance guard does not have keycard for Floor 9.
+  - Floor 9 corridor guard is posted near elevator.
+    Room 31 corridor is UNGUARDED between patrols.
+
+  Window of opportunity: ~30 minutes between Briggs
+    patrols. But the door is still locked.

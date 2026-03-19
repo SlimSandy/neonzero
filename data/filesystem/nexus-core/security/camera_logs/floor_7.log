@@ -1,0 +1,46 @@
+╔══════════════════════════════════════════════════════╗
+║  SECURITY CAMERA LOG -- FLOOR 7 (CORPORATE)          ║
+║  Date Range: 2026-03-13 20:00 to 2026-03-14 04:00    ║
+╚══════════════════════════════════════════════════════╝
+
+[F7-LOBBY-01] 2026-03-13 20:15:22
+  VOSS, K. enters building via main entrance.
+  Keycard scan: Valid. Clearance: Level 4.
+
+[F7-CORR-02] 2026-03-13 20:18:45
+  VOSS, K. proceeds to Office 7-14B.
+
+[F7-OFFICE] 2026-03-13 20:19:30
+  VOSS, K. logs into terminal NX7-031.
+  Begins accessing mail and document servers.
+
+[F7-OFFICE] 2026-03-13 23:55:00
+  VOSS, K. initiates SSH session to archive server.
+  ALERT: Unusual after-hours activity.
+
+[F7-OFFICE] 2026-03-14 00:12:04
+  VOSS, K. connected to archive. Large file transfer detected.
+  Security notified.
+
+[F7-OFFICE] 2026-03-14 01:02:11
+  VOSS, K. attempts privilege escalation on classified directory.
+  ACCESS DENIED. Alert escalated to Director Sable.
+
+[F7-OFFICE] 2026-03-14 01:30:00
+  Terminal NX7-031 remotely locked by ADMIN override.
+  VOSS, K. appears confused, then alarmed.
+
+[F7-CORR-02] 2026-03-14 01:32:15
+  VOSS, K. leaves office. Moving toward elevator.
+
+[F7-LOBBY-01] 2026-03-14 01:35:44
+  VOSS, K. intercepted by Lt. BRIGGS and security team.
+  VOSS appears to resist briefly. Subdued.
+
+[F7-LOBBY-01] 2026-03-14 01:36:20
+  SABLE, E. arrives. Brief exchange with VOSS.
+  SABLE [audio]: "I warned you, Kai. I really did."
+
+[F7-LOBBY-01] 2026-03-14 01:38:00
+  VOSS, K. escorted to Floor 9 elevator.
+  Security clearance temporarily elevated by Dir. Sable.

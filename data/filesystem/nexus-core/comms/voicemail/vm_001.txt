@@ -1,0 +1,32 @@
+╔══════════════════════════════════════════════════════╗
+║  VOICEMAIL TRANSCRIPT                                 ║
+╚══════════════════════════════════════════════════════╝
+
+  Recipient: VOSS, K.  (ext. 7031)
+  Caller:    SABLE, E. (ext. 0001)
+  Date:      2026-03-13 18:45:22
+  Duration:  0:42
+
+BEGIN TRANSCRIPT:
+-----
+
+Kai. It's Elena.
+
+I wanted to follow up on our conversation last week about
+your career trajectory here at Omnicron. I've been thinking
+about promoting you to Level 5 clearance. You've earned it.
+
+I'd like to discuss it over dinner tonight. My assistant
+will send the details. The restaurant is lovely -- you'll
+appreciate the wine selection.
+
+Oh, and if River contacts you tonight... just ignore her.
+She's going through a difficult time and she's not thinking
+clearly. Best to keep your distance.
+
+Looking forward to tonight, Kai.
+
+-----
+END TRANSCRIPT
+
+[SYSTEM NOTE: Recipient did not respond to this message]

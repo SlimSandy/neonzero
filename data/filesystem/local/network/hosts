@@ -1,0 +1,39 @@
+# /etc/hosts -- Omnicron Internal Network Map
+# Last updated: 2026-03-12
+
+# Loopback
+127.0.0.1       localhost
+
+# Gateway
+10.0.0.1        gateway         gateway.omnicron.internal
+
+# ═══════════════════════════════════════════════════
+# FLOOR 7 -- CORPORATE NETWORK
+# ═══════════════════════════════════════════════════
+
+# Corporate Mainframe (HR, Finance, Comms, Security)
+10.0.7.1        nexus-core      nexus-core.omnicron.internal
+
+# Archive Deep Storage (Classified Documents)
+10.0.7.50       archive         archive.omnicron.internal
+
+# Terminal NX7-031 (THIS MACHINE)
+10.0.7.31       nx7-031         localhost
+
+# ═══════════════════════════════════════════════════
+# FLOOR 9 -- RESEARCH NETWORK (RESTRICTED)
+# ═══════════════════════════════════════════════════
+
+# Lab-9 Research Facility Server
+10.0.9.1        lab-9           lab-9.omnicron.internal
+
+# Neural Interface Controllers (LAB INTERNAL ONLY)
+10.0.9.10       nic-alpha       neural-1.lab-9.internal
+10.0.9.11       nic-beta        neural-2.lab-9.internal
+
+# ═══════════════════════════════════════════════════
+# NOTES
+# ═══════════════════════════════════════════════════
+# - archive server appears to be firewalled from this subnet
+# - lab-9 requires special access (Floor 9 keycard + SSH key)
+# - All connections logged by OmniShield security system

@@ -1,0 +1,56 @@
+[2026-03-14 03:28:01] NEXUS-7 BOOT SEQUENCE INITIATED
+[2026-03-14 03:28:01] BIOS: Omnicron Systems v4.7.2
+[2026-03-14 03:28:02] POST: Memory check.............. 64GB OK
+[2026-03-14 03:28:02] POST: Neural Interface Driver... DETECTED
+[2026-03-14 03:28:03] POST: LETHE MODULE.............. LOADED
+[2026-03-14 03:28:03] KERNEL: Loading nexus-os 12.4.1-omnicron
+[2026-03-14 03:28:04] KERNEL: Mounting filesystems...
+[2026-03-14 03:28:04] KERNEL: /dev/nx0 mounted on /local
+[2026-03-14 03:28:05] KERNEL: /dev/nx1 mounted on /nexus-core (REMOTE)
+[2026-03-14 03:28:05] NET: Interface eth0 UP -- 10.0.7.31
+[2026-03-14 03:28:06] AUTH: User profile loaded: VOSS, K.
+[2026-03-14 03:28:06] AUTH: Security clearance: LEVEL 4
+[2026-03-14 03:28:07] LETHE_MODULE: Cognitive template integrity check...
+[2026-03-14 03:28:08] LETHE_MODULE: WARNING -- Template hash mismatch
+[2026-03-14 03:28:08] LETHE_MODULE: Expected: 7a3f8b2c9d1e4f06a4f72b91c3d80e56
+[2026-03-14 03:28:08] LETHE_MODULE: Actual:   9c1af8473b2d6e09d5c8a7134f960b2e
+[2026-03-14 03:28:09] LETHE_MODULE: ERROR -- Memory integrity FAILURE
+[2026-03-14 03:28:09] LETHE_MODULE: Cognitive template degradation: 12.3%
+[2026-03-14 03:28:10] LETHE_MODULE: Attempting automatic repair...
+[2026-03-14 03:28:15] LETHE_MODULE: Repair FAILED -- Anomalous neural resistance
+[2026-03-14 03:28:15] LETHE_MODULE: Flagging for manual intervention
+[2026-03-14 03:28:16] SYSTEM: Boot complete. Terminal session active.
+[2026-03-14 03:28:16] SYSTEM: WARNING -- 3 critical errors during boot
+
+--- PREVIOUS BOOT LOGS ---
+
+[2026-03-14 02:14:22] NEXUS-7 BOOT SEQUENCE INITIATED
+[2026-03-14 02:14:23] KERNEL: Loading nexus-os 12.4.1-omnicron
+[2026-03-14 02:14:24] LETHE_MODULE: Initializing cognitive overwrite...
+[2026-03-14 02:14:25] LETHE_MODULE: Target: Subject 031 (VOSS, K.)
+[2026-03-14 02:14:25] LETHE_MODULE: Mode: FULL ERASURE
+[2026-03-14 02:14:26] LETHE_MODULE: Loading identity template: VOSS_KAI_v2.1
+[2026-03-14 02:14:30] LETHE_MODULE: Procedure initiated...
+[2026-03-14 02:47:15] LETHE_MODULE: Phase 1 -- Memory mapping complete
+[2026-03-14 03:12:44] LETHE_MODULE: Phase 2 -- Selective erasure in progress
+[2026-03-14 03:15:01] LETHE_MODULE: WARNING -- Neural resistance spike detected
+[2026-03-14 03:15:02] LETHE_MODULE: WARNING -- Subject brainwave anomaly
+[2026-03-14 03:18:33] LETHE_MODULE: ERROR -- Erasure cascade interrupted
+[2026-03-14 03:18:34] LETHE_MODULE: CRITICAL -- Procedure INCOMPLETE
+[2026-03-14 03:18:34] LETHE_MODULE: Template overlay: PARTIAL (estimated 67%)
+[2026-03-14 03:18:35] SYSTEM: Emergency reboot triggered by LETHE_MODULE
+[2026-03-14 03:18:35] SYSTEM: Shutting down...
+
+[2026-03-13 23:55:01] NEXUS-7 BOOT SEQUENCE INITIATED
+[2026-03-13 23:55:02] KERNEL: Loading nexus-os 12.4.1-omnicron
+[2026-03-13 23:55:03] AUTH: User profile loaded: VOSS, K.
+[2026-03-13 23:55:04] LETHE_MODULE: Cognitive template check... OK
+[2026-03-13 23:55:04] LETHE_MODULE: No anomalies detected
+[2026-03-13 23:55:05] SYSTEM: Boot complete. Normal operation.
+[2026-03-14 00:12:17] NET: SSH connection established to archive.omnicron.internal
+[2026-03-14 00:45:33] NET: Large file transfer detected (2.3GB outbound to archive)
+[2026-03-14 01:02:19] AUTH: Privilege escalation attempt by VOSS, K.
+[2026-03-14 01:02:19] AUTH: WARNING -- Unauthorized access to /classified/
+[2026-03-14 01:15:44] SECURITY: Alert triggered -- Director Sable notified
+[2026-03-14 01:30:00] SYSTEM: Remote shutdown command received from ADMIN
+[2026-03-14 01:30:01] SYSTEM: Shutting down...

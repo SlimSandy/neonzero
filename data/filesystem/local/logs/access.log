@@ -1,0 +1,35 @@
+============================================================
+  NEXUS-7 ACCESS LOG -- Terminal NX7-031
+  Generated: 2026-03-14
+============================================================
+
+[2026-03-12 08:01:14] LOGIN SUCCESS  user=VOSS.K    src=10.0.7.31   method=LOCAL    session=nx7-4421
+[2026-03-12 08:45:22] LOGIN SUCCESS  user=VOSS.K    src=10.0.7.31   method=LOCAL    session=nx7-4422
+[2026-03-12 17:30:01] LOGOUT         user=VOSS.K    src=10.0.7.31   session=nx7-4422
+[2026-03-12 22:14:07] LOGIN FAILED   user=ADMIN     src=10.0.9.1    method=SSH      reason=INVALID_KEY
+[2026-03-12 22:14:09] LOGIN FAILED   user=ADMIN     src=10.0.9.1    method=SSH      reason=INVALID_KEY
+[2026-03-12 22:14:11] LOGIN FAILED   user=ADMIN     src=10.0.9.1    method=SSH      reason=INVALID_KEY
+[2026-03-12 22:15:00] LOGIN FAILED   user=ROOT      src=10.0.9.1    method=SSH      reason=ACCOUNT_LOCKED
+[2026-03-12 22:15:33] LOGIN FAILED   user=SABLE.E   src=10.0.9.1    method=SSH      reason=WRONG_TERMINAL
+[2026-03-13 02:17:44] LOGIN FAILED   user=CHEN.R    src=10.0.7.50   method=SSH      reason=ACCOUNT_DISABLED
+[2026-03-13 02:17:45] LOGIN FAILED   user=CHEN.R    src=10.0.7.50   method=SSH      reason=ACCOUNT_DISABLED
+[2026-03-13 02:17:46] LOGIN FAILED   user=CHEN.R    src=10.0.7.50   method=SSH      reason=ACCOUNT_DISABLED
+[2026-03-13 02:17:47] LOGIN FAILED   user=CHEN.R    src=10.0.7.50   method=SSH      reason=ACCOUNT_DISABLED  NOTE=5 attempts, lockout triggered
+[2026-03-13 08:00:30] LOGIN SUCCESS  user=VOSS.K    src=10.0.7.31   method=LOCAL    session=nx7-4430
+[2026-03-13 12:15:00] LOGIN SUCCESS  user=MAINT     src=10.0.0.1    method=SSH      session=nx7-4431  NOTE=Scheduled maintenance
+[2026-03-13 12:45:00] LOGOUT         user=MAINT     src=10.0.0.1    session=nx7-4431
+[2026-03-13 17:00:00] LOGOUT         user=VOSS.K    src=10.0.7.31   session=nx7-4430
+[2026-03-13 23:55:12] LOGIN SUCCESS  user=VOSS.K    src=10.0.7.31   method=LOCAL    session=nx7-4440
+[2026-03-14 00:12:04] SSH_CONNECT    user=VOSS.K    dst=10.0.7.50   method=KEY      status=SUCCESS  NOTE=archive.omnicron.internal
+[2026-03-14 00:45:18] FILE_TRANSFER  user=VOSS.K    dst=10.0.7.50   size=2.3GB      status=COMPLETE
+[2026-03-14 01:02:11] PRIV_ESC       user=VOSS.K    target=/classified/lethe  status=DENIED   ALERT=YES
+[2026-03-14 01:15:44] ALERT_SENT     target=SABLE.E  reason=UNAUTHORIZED_ACCESS  subject=VOSS.K
+[2026-03-14 01:30:00] FORCE_LOGOUT   user=VOSS.K    src=REMOTE_ADMIN  session=nx7-4440
+[2026-03-14 02:14:07] LOGIN SUCCESS  user=SABLE.E   src=10.0.9.1    method=MASTER_KEY  session=nx7-4441
+[2026-03-14 02:14:08] PRIV_ESC       user=SABLE.E   target=ALL       status=GRANTED  NOTE=DIRECTOR_OVERRIDE
+[2026-03-14 02:14:22] SYSTEM_CMD     user=SABLE.E   cmd="lethe_module --init --target=031"  status=EXECUTED
+[2026-03-14 02:31:07] LOGIN SUCCESS  user=VOSS.K    src=10.0.7.31   method=BIOMETRIC  session=nx7-4442  NOTE=Neural interface auth
+[2026-03-14 02:31:07] WARNING        user=VOSS.K    note="Biometric signature anomalous -- identity confidence: 67%"
+[2026-03-14 03:18:35] SYSTEM_REBOOT  trigger=LETHE_MODULE  reason=PROCEDURE_FAILURE
+[2026-03-14 03:28:16] LOGIN SUCCESS  user=VOSS.K    src=10.0.7.31   method=AUTO     session=nx7-4443  NOTE=Post-reboot auto-login
+[2026-03-14 03:28:17] WARNING        user=VOSS.K    note="Identity template integrity: 67.4% -- DEGRADING"

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neonvoid"
+version = "0.1.0"
+description = "NEON VOID - A cyberpunk terminal RPG"
+requires-python = ">=3.10"
+dependencies = [
+    "prompt_toolkit>=3.0",
+    "rich>=13.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+]
+
+[project.scripts]
+neonvoid = "neonvoid.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,23 @@
+Category,Budgeted,Actual,Variance,Notes
+Personnel,12000000,11200000,-800000,Chen terminated; savings redeployed
+Equipment_Neural,8500000,8500000,0,Neural interface hardware
+Equipment_Other,3000000,3200000,200000,Minor overrun
+Facilities,5000000,4800000,-200000,On track
+Subject_Acquisition,2000000,3400000,1400000,SIGNIFICANT OVERRUN - see note 1
+Subject_Maintenance,1500000,1800000,300000,Higher than expected survival rate
+Biological_Disposal,500000,950000,450000,Seven fatalities vs projected three
+Security_Operations,4000000,5200000,1200000,Increased monitoring costs
+Legal_Compliance,1000000,800000,-200000,No external audits this year
+Government_Liaison,2000000,2000000,0,AEGIS program management
+NovaMind_Holdings,0,9600000,9600000,SEE NOTE 2
+Prometheus_BioTech,0,6050000,6050000,SEE NOTE 3
+TOTAL,39500000,57500000,18000000,46% over budget
+
+# NOTE 1: Subject acquisition costs increased because
+#   "volunteer" pipeline dried up. Shifted to channel (d).
+# NOTE 2: NovaMind payments not in original budget.
+#   Approved by Dir. Sable under discretionary authority.
+#   ALL PAYMENTS GO TO SABLE FAMILY ENTITY.
+# NOTE 3: Prometheus covers "disposal" of failed subjects.
+#   Bodies are not returned to families. Families are told
+#   subjects "relocated for work."
