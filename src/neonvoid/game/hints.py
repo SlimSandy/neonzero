@@ -1,12 +1,44 @@
-"""Context-sensitive hint system with 3 tiers: vague -> moderate -> specific."""
+"""State-aware hint system with multi-step objectives and 5 escalation tiers."""
 
 from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import Callable
 
 from neonvoid.game.state import GameState
 
 
+# ═══════════════════════════════════════════════════════════
+# HINT STEP: one actionable step within an objective
+# ═══════════════════════════════════════════════════════════
+
+@dataclass
+class HintStep:
+    """A single actionable step within a multi-step objective."""
+    action: str           # Short description: "Read the firewall rules"
+    nudge: str            # Tier 1 - atmospheric/thematic
+    hint: str             # Tier 2 - names the command or location
+    walkthrough: str      # Tier 3 - exact command to type
+    done_when: Callable[[GameState], bool]  # Predicate: is this step complete?
+
+
+# ═══════════════════════════════════════════════════════════
+# HELPERS for done_when predicates
+# ═══════════════════════════════════════════════════════════
+
+def _has_read(state: GameState, filename_part: str) -> bool:
+    """Check if the player has read a file containing filename_part (case-insensitive)."""
+    target = filename_part.lower()
+    return any(target in f.lower() for f in state.files_read)
+
+
+def _has_cmd(state: GameState, cmd: str) -> bool:
+    """Check if the player has used a command."""
+    return cmd in state.commands_used
+
+
 class HintSystem:
-    """Provides contextual hints based on current game state."""
+    """Provides contextual, state-aware hints based on current game progress."""
 
     def __init__(self):
         self._hint_counts: dict[str, int] = {}
@@ -15,22 +47,127 @@ class HintSystem:
         """Get a hint appropriate to the player's current progress."""
         state.hints_used += 1
 
-        # Determine what the player should be doing next
+        # Determine current objective
         hint_key = self._get_current_objective(state)
-        self._hint_counts[hint_key] = self._hint_counts.get(hint_key, 0) + 1
-        tier = min(self._hint_counts[hint_key], 3)
+        steps = HINTS.get(hint_key, [])
+        objective = OBJECTIVES.get(hint_key, "Explore and investigate.")
 
-        hints = HINTS.get(hint_key, {})
-        hint_text = hints.get(tier, "[dim]No hint available for current state.[/dim]")
+        if not steps:
+            return "[dim cyan]No hint available. Try exploring with [bold]ls[/bold] and [bold]cat[/bold].[/dim cyan]"
 
-        tier_labels = {1: "VAGUE", 2: "MODERATE", 3: "SPECIFIC"}
-        label = tier_labels.get(tier, "")
+        # Find the first incomplete step
+        step_idx, active_step = self._find_active_step(steps, state)
 
+        if active_step is None:
+            # All steps done but objective flag not yet set — safety fallback
+            return (
+                "[bold green]You've completed all the steps for this objective.[/bold green]\n"
+                "[dim]The game should advance shortly. Try running a command or exploring.[/dim]"
+            )
+
+        # Per-step tier counter (resets when step advances)
+        step_key = f"{hint_key}:{step_idx}"
+        self._hint_counts[step_key] = self._hint_counts.get(step_key, 0) + 1
+        tier = min(self._hint_counts[step_key], 5)
+
+        # Build the hint text based on tier
+        if tier == 1:
+            hint_text = active_step.nudge
+        elif tier == 2:
+            hint_text = active_step.hint
+        elif tier == 3:
+            hint_text = active_step.walkthrough
+        elif tier == 4:
+            hint_text = self._build_solution(active_step)
+        else:  # tier 5+
+            hint_text = self._build_lifeline(steps, step_idx, state)
+
+        # Visual styling per tier
+        tier_styles = {
+            1: ("NUDGE", "dim cyan", "░"),
+            2: ("HINT", "cyan", "▒"),
+            3: ("WALKTHROUGH", "bold yellow", "█"),
+            4: ("SOLUTION", "bold magenta", "▓"),
+            5: ("LIFELINE", "bold red", "█"),
+        }
+        label, style, block = tier_styles.get(tier, ("HINT", "cyan", "▒"))
+
+        border = block * 50
+        lines = [
+            f"[{style}]{border}[/{style}]",
+            f"[{style}]  {label} (tier {tier}/5)[/{style}]",
+            f"[{style}]{border}[/{style}]",
+            "",
+            f"[dim]Current objective:[/dim] [bold]{objective}[/bold]",
+            f"[dim]Current step:[/dim] {active_step.action}",
+            "",
+            hint_text,
+            "",
+        ]
+
+        # Show completed steps for context
+        if step_idx > 0:
+            completed = []
+            for i in range(step_idx):
+                completed.append(f"  [green]✓[/green] [dim]{steps[i].action}[/dim]")
+            lines.insert(7, "[dim]Already done:[/dim]")
+            for i, c in enumerate(completed):
+                lines.insert(8 + i, c)
+            lines.insert(8 + len(completed), "")
+
+        if tier < 5:
+            lines.append(
+                f"[dim]Type [bold]hint[/bold] again for a stronger hint "
+                f"({tier + 1}/5).[/dim]"
+            )
+        else:
+            lines.append(
+                "[dim]This is the maximum hint. All remaining steps are listed above.[/dim]"
+            )
+
+        # Show progress context
+        progress = self._get_progress_summary(state)
+        if progress:
+            lines.append("")
+            lines.append(f"[dim]{progress}[/dim]")
+
+        return "\n".join(lines)
+
+    def _find_active_step(
+        self, steps: list[HintStep], state: GameState
+    ) -> tuple[int, HintStep | None]:
+        """Find the first incomplete step. Returns (index, step) or (len, None)."""
+        for i, step in enumerate(steps):
+            if not step.done_when(state):
+                return i, step
+        return len(steps), None
+
+    def _build_solution(self, step: HintStep) -> str:
+        """Tier 4: Bold command repeat with explanation."""
         return (
-            f"[dim cyan]── HINT ({label}) ──[/dim cyan]\n"
-            f"{hint_text}\n"
-            f"[dim]Type 'hint' again for more detail.[/dim]"
+            f"[bold]Type this exact command now:[/bold]\n"
+            f"\n"
+            f"  [bold green on black] {step.walkthrough.strip()} [/bold green on black]\n"
+            f"\n"
+            f"[dim]This will: {step.action.lower()}[/dim]"
         )
+
+    def _build_lifeline(
+        self, steps: list[HintStep], current_idx: int, state: GameState
+    ) -> str:
+        """Tier 5: Show all remaining steps as a numbered checklist."""
+        lines = ["[bold]Complete walkthrough — all remaining steps:[/bold]\n"]
+        num = 1
+        for i in range(current_idx, len(steps)):
+            step = steps[i]
+            if step.done_when(state):
+                continue
+            lines.append(f"  [bold yellow]{num}.[/bold yellow] {step.action}")
+            lines.append(f"     [bold green]{step.walkthrough.strip()}[/bold green]")
+            lines.append("")
+            num += 1
+        lines.append("[dim]Follow these steps in order to complete this objective.[/dim]")
+        return "\n".join(lines)
 
     def _get_current_objective(self, state: GameState) -> str:
         """Determine what the player should be working on."""
@@ -98,148 +235,666 @@ class HintSystem:
 
         return "explore_start"
 
+    def _get_progress_summary(self, state: GameState) -> str:
+        """Show a brief summary of where the player stands."""
+        act_names = {1: "Who Am I?", 2: "What Happened?", 3: "What Am I?", 4: "Escape"}
+        act_name = act_names.get(state.act, "???")
 
-HINTS: dict[str, dict[int, str]] = {
-    # ═══ ACT 1 ═══
-    "explore_start": {
-        1: "[dim]Look around. What's in this room?[/dim]",
-        2: "[dim]Try using [bold]ls[/bold] to see what files and directories are here.[/dim]",
-        3: "[dim]Type [bold]ls[/bold] to list files, then [bold]cd desktop[/bold] and [bold]cat README.txt[/bold].[/dim]",
-    },
-    "find_identity": {
-        1: "[dim]The README mentioned checking your messages.[/dim]",
-        2: "[dim]There should be a mail directory. Navigate to your inbox.[/dim]",
-        3: "[dim]Type [bold]cd mail/inbox[/bold] then [bold]cat 001_welcome.msg[/bold].[/dim]",
-    },
-    "read_emails": {
-        1: "[dim]Read all your messages. Someone sent you something urgent.[/dim]",
-        2: "[dim]There are more messages in your inbox. Read them all.[/dim]",
-        3: "[dim]Type [bold]cat 003_urgent.msg[/bold] to read the urgent message from 'R'.[/dim]",
-    },
-    "find_deleted": {
-        1: "[dim]The urgent message said 'delete everything.' But did they really delete everything?[/dim]",
-        2: "[dim]Some files are hidden. The [bold]ls -a[/bold] command reveals hidden files and directories.[/dim]",
-        3: "[dim]Go to the mail directory and type [bold]ls -a[/bold]. You'll find a .deleted folder.[/dim]",
-    },
-    "find_ssh_creds": {
-        1: "[dim]The deleted messages contain valuable information. Read them all carefully.[/dim]",
-        2: "[dim]One of the deleted messages has network credentials.[/dim]",
-        3: "[dim]In mail/.deleted/, [bold]cat 005_coordinates.msg[/bold] for SSH access credentials.[/dim]",
-    },
-    "search_lethe": {
-        1: "[dim]The name 'LETHE' keeps coming up. Search for more information about it.[/dim]",
-        2: "[dim]You can search through file contents with [bold]grep[/bold]. Try searching the logs.[/dim]",
-        3: "[dim]Type [bold]grep -ri \"lethe\" logs/[/bold] to search all log files for LETHE references.[/dim]",
-    },
-    "unlock_lethe": {
-        1: "[dim]There's a document about Project LETHE, but it's locked.[/dim]",
-        2: "[dim]Check file permissions with [bold]ls -l docs/[/bold]. One file has restricted access.[/dim]",
-        3: "[dim]Type [bold]chmod +r docs/project_lethe_summary.txt[/bold] to make it readable.[/dim]",
-    },
-    "read_lethe": {
-        1: "[dim]You unlocked the file. Now read it.[/dim]",
-        2: "[dim]Use cat to read the LETHE summary document.[/dim]",
-        3: "[dim]Type [bold]cat docs/project_lethe_summary.txt[/bold].[/dim]",
-    },
-    "map_network": {
-        1: "[dim]You have SSH credentials. But where do they lead?[/dim]",
-        2: "[dim]Check the network configuration files to find server addresses.[/dim]",
-        3: "[dim]Type [bold]cat network/hosts[/bold] and [bold]cat .ssh/config[/bold].[/dim]",
-    },
-    "ssh_nexus": {
-        1: "[dim]You have everything you need to reach the corporate server.[/dim]",
-        2: "[dim]Use the [bold]ssh[/bold] command to connect to the server you found.[/dim]",
-        3: "[dim]Type [bold]ssh kai@nexus-core[/bold] to connect.[/dim]",
-    },
+        act1_done = sum([
+            state.read_readme, state.found_identity, state.read_urgent_email,
+            state.found_deleted_mail, state.found_ssh_creds, state.grepped_lethe,
+            state.unlocked_lethe_summary, state.read_lethe_summary,
+            state.mapped_network,
+        ])
+        act2_done = sum([
+            state.discovered_river_death, state.read_chat_logs,
+            state.found_financial_evidence, state.reviewed_camera_logs,
+            state.heard_voicemail, state.bypassed_firewall,
+        ])
+        act3_done = sum([
+            state.extracted_evidence, state.discovered_subject_031,
+            state.discovered_true_identity, state.found_backdoor,
+        ])
+        act4_done = sum([
+            state.read_own_surveillance, state.found_schedule,
+            state.escape_unlocked, state.unlocked_door,
+        ])
 
-    # ═══ ACT 2 ═══
-    "investigate_river": {
-        1: "[dim]Who is 'R' from those emails? The company keeps records on everyone.[/dim]",
-        2: "[dim]Check the HR department for employee records.[/dim]",
-        3: "[dim]Navigate to [bold]hr/employees/[/bold] and look for files related to 'Chen' or 'River'.[/dim]",
-    },
-    "read_chats": {
-        1: "[dim]People talk. Their conversations might reveal what really happened.[/dim]",
-        2: "[dim]The comms directory has internal chat logs. Try filtering for relevant names.[/dim]",
-        3: "[dim]Try [bold]cat comms/internal_chat/project_lethe.log | grep \"Chen\"[/bold].[/dim]",
-    },
-    "find_finances": {
-        1: "[dim]Follow the money. Corruption always leaves a paper trail.[/dim]",
-        2: "[dim]The finance directory has budget records and transaction logs.[/dim]",
-        3: "[dim]Read [bold]finance/transactions/offshore_transfers.log[/bold] and compare with budgets using [bold]diff[/bold].[/dim]",
-    },
-    "check_cameras": {
-        1: "[dim]Security cameras see everything. What did they record?[/dim]",
-        2: "[dim]Check the security/camera_logs/ directory.[/dim]",
-        3: "[dim]Type [bold]cat security/camera_logs/lab_9.log[/bold] for crucial footage.[/dim]",
-    },
-    "check_voicemail": {
-        1: "[dim]Someone left you a message. A voice from beyond.[/dim]",
-        2: "[dim]Check the voicemail transcripts in comms/voicemail/.[/dim]",
-        3: "[dim]Type [bold]cat comms/voicemail/vm_002.txt[/bold]. River left you directions.[/dim]",
-    },
-    "bypass_firewall": {
-        1: "[dim]The archive server is blocked. But firewalls have rules, and rules have exceptions.[/dim]",
-        2: "[dim]Examine the firewall configuration in security/firewall/.[/dim]",
-        3: "[dim]Read [bold]security/firewall/rules.conf[/bold]. Use the [bold]firewall-ctl[/bold] command documented there to disable the block.[/dim]",
-    },
-    "ssh_archive": {
-        1: "[dim]The path to the archive is clear now. River said the proof is there.[/dim]",
-        2: "[dim]Connect to the archive server with SSH.[/dim]",
-        3: "[dim]Type [bold]ssh kai@archive[/bold].[/dim]",
-    },
+        progress_map = {
+            1: f"Act 1 progress: {act1_done}/9 objectives",
+            2: f"Act 2 progress: {act2_done}/6 objectives",
+            3: f"Act 3 progress: {act3_done}/4 objectives",
+            4: f"Act 4 progress: {act4_done}/4 objectives",
+        }
 
-    # ═══ ACT 3 ═══
-    "find_evidence": {
-        1: "[dim]River hid proof here. It's compressed and buried deep.[/dim]",
-        2: "[dim]Use [bold]find[/bold] to locate the evidence archive. Try searching for tar files.[/dim]",
-        3: "[dim]Type [bold]find . -name '*.tar.gz'[/bold] then [bold]tar xzf[/bold] the archive you find.[/dim]",
-    },
-    "read_subjects": {
-        1: "[dim]The classified LETHE files contain subject records. You are one of them.[/dim]",
-        2: "[dim]Look in classified/lethe/subjects/ for test subject files.[/dim]",
-        3: "[dim]Read [bold]classified/lethe/subjects/subject_031.txt[/bold]. Subject 031 is you.[/dim]",
-    },
-    "find_true_identity": {
-        1: "[dim]If Kai Voss is a fabrication... who are you really?[/dim]",
-        2: "[dim]There might be backup records that show your original identity.[/dim]",
-        3: "[dim]Check [bold]backups/deleted_records/[/bold] for your original employee record. Use [bold]diff[/bold] to compare.[/dim]",
-    },
-    "find_backdoor": {
-        1: "[dim]River left a way into the lab. She always had a backup plan.[/dim]",
-        2: "[dim]Hidden directories can be found with [bold]find[/bold] or [bold]ls -a[/bold].[/dim]",
-        3: "[dim]Type [bold]find . -name '.backdoor'[/bold] or check [bold]ls -aR system/[/bold].[/dim]",
-    },
-    "ssh_lab9": {
-        1: "[dim]You have River's backdoor. The lab awaits.[/dim]",
-        2: "[dim]Read the README in the backdoor directory for connection instructions.[/dim]",
-        3: "[dim]Type [bold]ssh kai@lab-9[/bold] using River's tunnel.[/dim]",
-    },
+        return f"[Act {state.act}: {act_name}] {progress_map.get(state.act, '')}"
 
-    # ═══ ACT 4 ═══
-    "read_surveillance": {
-        1: "[dim]You're inside the system that watches you. Turn the eye inward.[/dim]",
-        2: "[dim]The surveillance directory monitors all rooms. Including yours.[/dim]",
-        3: "[dim]Type [bold]cat surveillance/room_31/camera_feed.log[/bold].[/dim]",
-    },
-    "find_schedule": {
-        1: "[dim]Time is running out. Find out exactly how much you have left.[/dim]",
-        2: "[dim]The operations directory has scheduling information.[/dim]",
-        3: "[dim]Type [bold]cat operations/schedule.txt[/bold].[/dim]",
-    },
-    "wait_escape_unlock": {
-        1: "[dim]Keep exploring. The way out will reveal itself.[/dim]",
-        2: "[dim]Make sure you've read the surveillance feed AND the schedule.[/dim]",
-        3: "[dim]Once you've read both the camera feed and the schedule, look for an escape route.[/dim]",
-    },
-    "solve_passphrase": {
-        1: "[dim]The door requires a passphrase. The answer is scattered across everything you've learned.[/dim]",
-        2: "[dim]Read the lock system config for a hint. The passphrase combines: the project name, your subject number, River's ID, and a keyword.[/dim]",
-        3: "[dim]The passphrase is: [bold]LETHE-031-RC4471-REMEMBER[/bold]. Run the override script with it.[/dim]",
-    },
-    "make_choice": {
-        1: "[dim]The door is open. But the evidence is still here. What will you do with it?[/dim]",
-        2: "[dim]Check escape/comms/ for communication options. You can send the evidence before you leave.[/dim]",
-        3: "[dim]Use [bold]curl --data @EVIDENCE relay://journalist[/bold] to send evidence, or type [bold]exit[/bold] to just escape.[/dim]",
-    },
+
+# ═══════════════════════════════════════════════════════════
+# OBJECTIVE DESCRIPTIONS (shown as "Current objective:")
+# ═══════════════════════════════════════════════════════════
+
+OBJECTIVES: dict[str, str] = {
+    # Act 1
+    "explore_start": "Figure out where you are",
+    "find_identity": "Discover your identity",
+    "read_emails": "Read all your messages",
+    "find_deleted": "Find what was hidden from you",
+    "find_ssh_creds": "Find network access credentials",
+    "search_lethe": "Investigate Project LETHE",
+    "unlock_lethe": "Access the locked LETHE document",
+    "read_lethe": "Read the LETHE summary",
+    "map_network": "Map the network to find other servers",
+    "ssh_nexus": "Connect to the corporate server",
+    # Act 2
+    "investigate_river": "Find out who 'R' is",
+    "read_chats": "Read the internal communications",
+    "find_finances": "Follow the money trail",
+    "check_cameras": "Review security camera footage",
+    "check_voicemail": "Check your voicemail",
+    "bypass_firewall": "Disable the archive firewall block",
+    "ssh_archive": "Connect to the archive server",
+    # Act 3
+    "find_evidence": "Find and extract River's evidence archive",
+    "read_subjects": "Read the LETHE subject files",
+    "find_true_identity": "Discover your original identity",
+    "find_backdoor": "Find River's backdoor into Lab-9",
+    "ssh_lab9": "Connect to Lab-9",
+    # Act 4
+    "read_surveillance": "Access the surveillance system",
+    "find_schedule": "Find the procedure schedule",
+    "wait_escape_unlock": "Trigger the escape route",
+    "solve_passphrase": "Unlock the door to Room 31",
+    "make_choice": "Decide what to do with the evidence",
+}
+
+
+# ═══════════════════════════════════════════════════════════
+# HINTS: Ordered step lists per objective
+#   Each HintStep has:
+#     - action: what the player needs to do
+#     - nudge (tier 1): atmospheric, points a direction
+#     - hint (tier 2): names the command or location
+#     - walkthrough (tier 3): exact command to type
+#     - done_when: predicate checking if this step is complete
+#   Tiers 4-5 are auto-generated from the step data.
+# ═══════════════════════════════════════════════════════════
+
+HINTS: dict[str, list[HintStep]] = {
+
+    # ═══════════ ACT 1 ═══════════
+
+    "explore_start": [
+        HintStep(
+            action="List files in the current directory",
+            nudge=(
+                "The cursor blinks. The terminal waits. What's around you?\n"
+                "In a real terminal, you'd start by [italic]listing[/italic] what's here."
+            ),
+            hint=(
+                "The command [bold cyan]ls[/bold cyan] lists files and directories.\n"
+                "Try it. See what's on this machine."
+            ),
+            walkthrough="ls",
+            done_when=lambda s: _has_cmd(s, "ls"),
+        ),
+        HintStep(
+            action="Navigate to the desktop directory",
+            nudge=(
+                "You can see what's here now. One of these directories looks\n"
+                "like a good starting point — where you'd normally find notes."
+            ),
+            hint=(
+                "Use [bold cyan]cd desktop[/bold cyan] to enter the desktop directory.\n"
+                "The [bold cyan]cd[/bold cyan] command changes your current directory."
+            ),
+            walkthrough="cd desktop",
+            done_when=lambda s: _has_read(s, "README"),
+        ),
+        HintStep(
+            action="Read the README file",
+            nudge=(
+                "There's a file here that someone left for you.\n"
+                "It's practically screaming to be read."
+            ),
+            hint=(
+                "Use [bold cyan]cat README.txt[/bold cyan] to read the contents\n"
+                "of the README file."
+            ),
+            walkthrough="cat README.txt",
+            done_when=lambda s: s.read_readme,
+        ),
+    ],
+
+    "find_identity": [
+        HintStep(
+            action="Navigate to the mail inbox",
+            nudge=(
+                "The README said to check your mail. Someone left messages\n"
+                "for you. Your identity might be in those messages."
+            ),
+            hint=(
+                "Navigate to the [bold]mail/inbox[/bold] directory.\n"
+                "Use [bold cyan]cd ~/mail/inbox[/bold cyan] to get there."
+            ),
+            walkthrough="cd ~/mail/inbox",
+            done_when=lambda s: _has_read(s, "001_welcome") or _has_read(s, "inbox"),
+        ),
+        HintStep(
+            action="Read the welcome email",
+            nudge=(
+                "There are messages waiting. Start with the first one —\n"
+                "it should tell you who you are."
+            ),
+            hint=(
+                "Read the messages with [bold cyan]cat[/bold cyan].\n"
+                "Start with [bold]001_welcome.msg[/bold]."
+            ),
+            walkthrough="cat 001_welcome.msg",
+            done_when=lambda s: s.found_identity,
+        ),
+    ],
+
+    "read_emails": [
+        HintStep(
+            action="Read the urgent message",
+            nudge=(
+                "You've found some messages, but not all of them.\n"
+                "Someone sent you something [italic]urgent[/italic]. Keep reading."
+            ),
+            hint=(
+                "There are more messages in your inbox. Message 003\n"
+                "has important information. Read it."
+            ),
+            walkthrough="cat 003_urgent.msg",
+            done_when=lambda s: s.read_urgent_email,
+        ),
+    ],
+
+    "find_deleted": [
+        HintStep(
+            action="Reveal hidden files in the mail directory",
+            nudge=(
+                "The urgent message told you to \"delete everything.\"\n"
+                "But deletion is rarely permanent. What's hidden in\n"
+                "plain sight? Some things are [italic]invisible[/italic] by default..."
+            ),
+            hint=(
+                "In Linux, files starting with a dot (.) are hidden.\n"
+                "The [bold cyan]ls -a[/bold cyan] command reveals them.\n"
+                "Try it in the [bold]mail[/bold] directory."
+            ),
+            walkthrough="ls -a ~/mail",
+            done_when=lambda s: s.found_deleted_mail,
+        ),
+        HintStep(
+            action="Enter the hidden .deleted directory",
+            nudge="You found something hidden. Go inside.",
+            hint="Use [bold cyan]cd .deleted[/bold cyan] to enter the hidden folder.",
+            walkthrough="cd ~/mail/.deleted",
+            done_when=lambda s: s.found_deleted_mail,
+        ),
+    ],
+
+    "find_ssh_creds": [
+        HintStep(
+            action="Read the deleted messages",
+            nudge=(
+                "The deleted messages contain something valuable.\n"
+                "Read them all — one has the keys to the network."
+            ),
+            hint=(
+                "There are two deleted messages. One has [bold]SSH credentials[/bold]\n"
+                "to access another server. Read both."
+            ),
+            walkthrough="cat 005_coordinates.msg",
+            done_when=lambda s: s.found_ssh_creds,
+        ),
+    ],
+
+    "search_lethe": [
+        HintStep(
+            action="Search the logs for LETHE references",
+            nudge=(
+                "\"LETHE\" keeps appearing. What is it? The answer is\n"
+                "buried in the system logs. You need to [italic]search[/italic] for it."
+            ),
+            hint=(
+                "The [bold cyan]grep[/bold cyan] command searches inside files.\n"
+                "Use it with [bold]-ri[/bold] to search recursively and case-insensitively\n"
+                "through the logs directory."
+            ),
+            walkthrough="grep -ri \"lethe\" ~/logs/",
+            done_when=lambda s: s.grepped_lethe,
+        ),
+    ],
+
+    "unlock_lethe": [
+        HintStep(
+            action="Check file permissions in the docs directory",
+            nudge=(
+                "There's a document about Project LETHE in your docs\n"
+                "folder, but it's locked down. Permissions are just\n"
+                "numbers — and numbers can be changed."
+            ),
+            hint=(
+                "Use [bold cyan]ls -l docs/[/bold cyan] to see file permissions.\n"
+                "One file has no read permission (----------)."
+            ),
+            walkthrough="ls -l ~/docs/",
+            done_when=lambda s: _has_read(s, "project_lethe_summary"),
+        ),
+        HintStep(
+            action="Grant read permission to the locked file",
+            nudge="You found the locked file. Now change its permissions.",
+            hint=(
+                "Use [bold cyan]chmod +r[/bold cyan] to add read permission.\n"
+                "Target the LETHE summary file in docs/."
+            ),
+            walkthrough="chmod +r ~/docs/project_lethe_summary.txt",
+            done_when=lambda s: s.unlocked_lethe_summary,
+        ),
+    ],
+
+    "read_lethe": [
+        HintStep(
+            action="Read the LETHE summary document",
+            nudge="You unlocked it. Now [italic]read[/italic] it. The truth about this place is in that file.",
+            hint="Use [bold cyan]cat[/bold cyan] to read the LETHE summary you just unlocked.",
+            walkthrough="cat ~/docs/project_lethe_summary.txt",
+            done_when=lambda s: s.read_lethe_summary,
+        ),
+    ],
+
+    "map_network": [
+        HintStep(
+            action="Read the network hosts file",
+            nudge=(
+                "You have SSH credentials from River, but you need to\n"
+                "know where to connect. The network configuration files\n"
+                "will show you the map."
+            ),
+            hint=(
+                "Check the [bold]network/[/bold] directory for a hosts file.\n"
+                "Also look at [bold].ssh/config[/bold] for SSH target details."
+            ),
+            walkthrough="cat ~/network/hosts",
+            done_when=lambda s: s.mapped_network,
+        ),
+    ],
+
+    "ssh_nexus": [
+        HintStep(
+            action="SSH to the corporate server",
+            nudge=(
+                "You have credentials. You know the server name. It's\n"
+                "time to leave the local terminal and go deeper."
+            ),
+            hint=(
+                "Use the [bold cyan]ssh[/bold cyan] command to connect.\n"
+                "The format is [bold]ssh user@server[/bold]."
+            ),
+            walkthrough="ssh kai@nexus-core",
+            done_when=lambda s: s.connected_nexus_core,
+        ),
+    ],
+
+    # ═══════════ ACT 2 ═══════════
+
+    "investigate_river": [
+        HintStep(
+            action="Find River Chen's employee record",
+            nudge=(
+                "\"R\" sent those emails. Who are they? A corporation this\n"
+                "big keeps records on everyone. Find the HR department."
+            ),
+            hint=(
+                "Navigate to [bold]hr/employees/[/bold] and look at the\n"
+                "files there. Someone with the name 'chen' might be 'R'."
+            ),
+            walkthrough="cat hr/employees/chen_river.record",
+            done_when=lambda s: s.discovered_river_death,
+        ),
+    ],
+
+    "read_chats": [
+        HintStep(
+            action="Read the internal chat logs",
+            nudge=(
+                "People talk, and corporations log everything. Internal\n"
+                "communications could reveal the dynamics behind what happened."
+            ),
+            hint=(
+                "Check the [bold]comms/[/bold] directory. There are internal\n"
+                "chat logs about Project LETHE."
+            ),
+            walkthrough="cat comms/internal_chat/project_lethe.log",
+            done_when=lambda s: s.read_chat_logs,
+        ),
+    ],
+
+    "find_finances": [
+        HintStep(
+            action="Find the financial evidence",
+            nudge=(
+                "Corruption leaves a paper trail. Follow the money\n"
+                "and you'll find the motive."
+            ),
+            hint=(
+                "The [bold]finance/[/bold] directory has transaction logs.\n"
+                "Look for offshore transfers or unusual payments."
+            ),
+            walkthrough="cat finance/transactions/offshore_transfers.log",
+            done_when=lambda s: s.found_financial_evidence,
+        ),
+    ],
+
+    "check_cameras": [
+        HintStep(
+            action="Review Lab-9 security camera logs",
+            nudge=(
+                "Security cameras see everything. What did they record\n"
+                "the night you ended up in that room?"
+            ),
+            hint=(
+                "Look in [bold]security/camera_logs/[/bold] for footage.\n"
+                "The lab cameras might show what happened to you."
+            ),
+            walkthrough="cat security/camera_logs/lab_9.log",
+            done_when=lambda s: s.reviewed_camera_logs,
+        ),
+    ],
+
+    "check_voicemail": [
+        HintStep(
+            action="Listen to River's voicemail",
+            nudge=(
+                "Someone left you a message. A voice from someone who\n"
+                "cared enough to warn you, even when it cost them everything."
+            ),
+            hint=(
+                "Check [bold]comms/voicemail/[/bold] for voicemail transcripts.\n"
+                "River left you critical information."
+            ),
+            walkthrough="cat comms/voicemail/vm_002.txt",
+            done_when=lambda s: s.heard_voicemail,
+        ),
+    ],
+
+    "bypass_firewall": [
+        HintStep(
+            action="Read the firewall rules",
+            nudge=(
+                "The archive server is blocked by a firewall. But every\n"
+                "wall has a weakness. Look at how it's configured."
+            ),
+            hint=(
+                "Read the firewall rules in [bold]security/firewall/rules.conf[/bold].\n"
+                "There's a management command documented there."
+            ),
+            walkthrough="cat security/firewall/rules.conf",
+            done_when=lambda s: s.read_firewall_rules or _has_read(s, "rules.conf"),
+        ),
+        HintStep(
+            action="List active firewall rules",
+            nudge=(
+                "Now that you've seen the config, try the management command\n"
+                "mentioned in the rules file."
+            ),
+            hint=(
+                "Run [bold cyan]firewall-ctl list-rules[/bold cyan] to see\n"
+                "which rules are currently active."
+            ),
+            walkthrough="firewall-ctl list-rules",
+            done_when=lambda s: _has_cmd(s, "firewall-ctl"),
+        ),
+        HintStep(
+            action="Disable the archive access rule",
+            nudge=(
+                "One of those rules is blocking archive access. Disable it\n"
+                "using the firewall control tool."
+            ),
+            hint=(
+                "Use [bold cyan]firewall-ctl disable-rule[/bold cyan] with the\n"
+                "rule that blocks archive access. Look for RULE_003."
+            ),
+            walkthrough="firewall-ctl disable-rule RULE_003",
+            done_when=lambda s: s.bypassed_firewall,
+        ),
+    ],
+
+    "ssh_archive": [
+        HintStep(
+            action="Connect to the archive server",
+            nudge="The firewall is down. The archive is waiting. River said the proof is there.",
+            hint="Connect to the archive server with [bold cyan]ssh[/bold cyan], just like you connected to nexus-core.",
+            walkthrough="ssh kai@archive",
+            done_when=lambda s: s.connected_archive,
+        ),
+    ],
+
+    # ═══════════ ACT 3 ═══════════
+
+    "find_evidence": [
+        HintStep(
+            action="Find the evidence archive file",
+            nudge=(
+                "River compressed the evidence into an archive file and\n"
+                "buried it deep. You need to [italic]find[/italic] it first."
+            ),
+            hint=(
+                "Use the [bold cyan]find[/bold cyan] command to search for compressed\n"
+                "archives (files ending in .tar.gz)."
+            ),
+            walkthrough="find . -name '*.tar.gz'",
+            done_when=lambda s: _has_read(s, "EVIDENCE") or _has_cmd(s, "find"),
+        ),
+        HintStep(
+            action="Extract the evidence archive",
+            nudge=(
+                "You found the archive. Now you need to extract its contents.\n"
+                "The [italic]tar[/italic] command handles compressed archives."
+            ),
+            hint=(
+                "Use [bold cyan]tar xzf[/bold cyan] to extract the .tar.gz file.\n"
+                "The file is in deep_storage/."
+            ),
+            walkthrough="tar xzf deep_storage/EVIDENCE.tar.gz",
+            done_when=lambda s: s.extracted_evidence,
+        ),
+    ],
+
+    "read_subjects": [
+        HintStep(
+            action="Read Subject 031's file",
+            nudge=(
+                "The classified LETHE files have subject records. Real\n"
+                "people who were put through the procedure. You might\n"
+                "find yourself in there..."
+            ),
+            hint=(
+                "Look in [bold]classified/lethe/subjects/[/bold] for test\n"
+                "subject files. Pay attention to Subject 031."
+            ),
+            walkthrough="cat classified/lethe/subjects/subject_031.txt",
+            done_when=lambda s: s.discovered_subject_031,
+        ),
+    ],
+
+    "find_true_identity": [
+        HintStep(
+            action="Find your original identity record",
+            nudge=(
+                "If \"Kai Voss\" is a fabrication programmed into your brain,\n"
+                "then who were you before? There might be backup records\n"
+                "that survived the cover-up."
+            ),
+            hint=(
+                "Check the [bold]backups/[/bold] directory. Deleted records\n"
+                "sometimes survive in backup systems."
+            ),
+            walkthrough="cat backups/deleted_records/voss_kai_ORIGINAL.record",
+            done_when=lambda s: s.discovered_true_identity,
+        ),
+    ],
+
+    "find_backdoor": [
+        HintStep(
+            action="Find River's hidden backdoor",
+            nudge=(
+                "River left a way into Lab-9. She always had a backup plan.\n"
+                "It's hidden somewhere on this server."
+            ),
+            hint=(
+                "Hidden directories start with a dot. Use [bold cyan]find[/bold cyan]\n"
+                "to search for hidden directories, or [bold cyan]ls -a[/bold cyan]\n"
+                "to check the system directory."
+            ),
+            walkthrough="find . -name '.backdoor'",
+            done_when=lambda s: _has_read(s, "backdoor") or _has_read(s, "README_RIVER"),
+        ),
+        HintStep(
+            action="Read River's instructions in the backdoor",
+            nudge="You found it. Read what River left behind.",
+            hint="Read the README file inside the [bold].backdoor[/bold] directory.",
+            walkthrough="cat system/.backdoor/README_RIVER.txt",
+            done_when=lambda s: s.found_backdoor,
+        ),
+    ],
+
+    "ssh_lab9": [
+        HintStep(
+            action="Connect to Lab-9 via the backdoor",
+            nudge="River's backdoor is open. The lab that controls your cage awaits.",
+            hint="Use [bold cyan]ssh[/bold cyan] to connect to lab-9 through River's tunnel.",
+            walkthrough="ssh kai@lab-9",
+            done_when=lambda s: s.connected_lab9,
+        ),
+    ],
+
+    # ═══════════ ACT 4 ═══════════
+
+    "read_surveillance": [
+        HintStep(
+            action="Read the Room 31 camera feed",
+            nudge=(
+                "You're inside the system that watches you. Every camera,\n"
+                "every sensor, every log. Turn the eye inward — watch\n"
+                "yourself being watched."
+            ),
+            hint=(
+                "The [bold]surveillance/[/bold] directory monitors all rooms.\n"
+                "Room 31 is YOUR room. Check the camera feed."
+            ),
+            walkthrough="cat surveillance/room_31/camera_feed.log",
+            done_when=lambda s: s.read_own_surveillance,
+        ),
+    ],
+
+    "find_schedule": [
+        HintStep(
+            action="Find the procedure schedule",
+            nudge=(
+                "Time is running out. You need to know exactly when\n"
+                "they're coming for you. Check the operations schedule."
+            ),
+            hint=(
+                "The [bold]operations/[/bold] directory has scheduling information.\n"
+                "Find out when Subject 031's next session is."
+            ),
+            walkthrough="cat operations/schedule.txt",
+            done_when=lambda s: s.found_schedule,
+        ),
+    ],
+
+    "wait_escape_unlock": [
+        HintStep(
+            action="Read the surveillance camera feed",
+            nudge=(
+                "You're close. Keep reading everything in this server.\n"
+                "The way out will reveal itself once you understand the full picture."
+            ),
+            hint=(
+                "Make sure you've read the surveillance camera feed.\n"
+                "Both camera logs AND schedule are needed."
+            ),
+            walkthrough="cat surveillance/room_31/camera_feed.log",
+            done_when=lambda s: s.read_own_surveillance,
+        ),
+        HintStep(
+            action="Read the operations schedule",
+            nudge="You're almost there. Check the operations schedule too.",
+            hint="Read [bold]operations/schedule.txt[/bold] to learn about the procedure timing.",
+            walkthrough="cat operations/schedule.txt",
+            done_when=lambda s: s.found_schedule,
+        ),
+        HintStep(
+            action="Check for new directories",
+            nudge="Both files read. Something should have changed. Look around.",
+            hint="Run [bold cyan]ls[/bold cyan] to see if any new directories have appeared.",
+            walkthrough="ls",
+            done_when=lambda s: s.escape_unlocked,
+        ),
+    ],
+
+    "solve_passphrase": [
+        HintStep(
+            action="Find the override script",
+            nudge=(
+                "The door has a passphrase lock. Look for the override\n"
+                "mechanism in the escape directory."
+            ),
+            hint=(
+                "Check [bold]escape/door_controls/[/bold] for the override script.\n"
+                "Read it to understand the passphrase format."
+            ),
+            walkthrough="cat escape/door_controls/override.sh",
+            done_when=lambda s: _has_read(s, "override.sh"),
+        ),
+        HintStep(
+            action="Assemble and enter the passphrase",
+            nudge=(
+                "The passphrase combines four things you've learned:\n"
+                "  • The project that erased your mind\n"
+                "  • Your subject number\n"
+                "  • River's employee ID\n"
+                "  • The word she kept telling you"
+            ),
+            hint=(
+                "Four pieces: [bold]PROJECT-SUBJECT-EMPLOYEEID-KEYWORD[/bold]\n"
+                "  • LETHE (the project name)\n"
+                "  • 031 (your subject number)\n"
+                "  • RC4471 (River Chen's ID from her employee record)\n"
+                "  • REMEMBER (what River kept saying)"
+            ),
+            walkthrough="./override.sh LETHE-031-RC4471-REMEMBER",
+            done_when=lambda s: s.unlocked_door,
+        ),
+    ],
+
+    "make_choice": [
+        HintStep(
+            action="Review your options",
+            nudge=(
+                "The door is open. But River's evidence is still on the\n"
+                "servers. You can walk away... or you can make sure her\n"
+                "sacrifice meant something."
+            ),
+            hint=(
+                "Check [bold]escape/comms/[/bold] for communication options.\n"
+                "You can send the evidence to journalists, authorities,\n"
+                "or broadcast it to everyone. Or just type [bold]exit[/bold] to leave."
+            ),
+            walkthrough=(
+                "Your choices:\n"
+                "  [bold cyan]curl --data @EVIDENCE relay://journalist[/bold cyan]\n"
+                "    → Ending A: Send to one journalist (targeted)\n\n"
+                "  [bold cyan]curl --data @EVIDENCE relay://broadcast[/bold cyan]\n"
+                "    → Ending C: Send to EVERYONE (maximum chaos)\n\n"
+                "  [bold cyan]exit[/bold cyan]\n"
+                "    → Ending B: Just walk out (evidence dies with you)"
+            ),
+            done_when=lambda s: s.sent_evidence or s.escaped,
+        ),
+    ],
 }

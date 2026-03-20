@@ -288,32 +288,90 @@ class ChmodCommand:
         return ""
 
     def _parse_mode(self, mode_str: str, path: Path) -> int:
-        """Parse chmod mode string (octal or symbolic)."""
+        """Parse chmod mode string (octal or symbolic).
+
+        Supports:
+            Octal:    644, 755, 0644, etc.
+            Symbolic: +r, u+r, a+rx, go-w, u+rw, etc.
+        """
         # Try octal first
         try:
             return int(mode_str, 8)
         except ValueError:
             pass
 
-        # Symbolic mode: +r, +w, +x, -r, etc.
+        # Symbolic mode: [ugoa]*[+-][rwx]+
+        # Examples: +r, u+r, a+rx, go-w, u+rw, +rwx
         current = path.stat().st_mode
-        if mode_str.startswith("+"):
-            for ch in mode_str[1:]:
-                if ch == "r":
-                    current |= stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH
-                elif ch == "w":
-                    current |= stat.S_IWUSR
-                elif ch == "x":
-                    current |= stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH
-        elif mode_str.startswith("-"):
-            for ch in mode_str[1:]:
-                if ch == "r":
-                    current &= ~(stat.S_IRUSR | stat.S_IRGRP | stat.S_IROTH)
-                elif ch == "w":
-                    current &= ~stat.S_IWUSR
-                elif ch == "x":
-                    current &= ~(stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
-        else:
-            raise ValueError(f"Unsupported mode: {mode_str}")
+
+        # Split on each +/- operation (supports chained like u+r,g+w but
+        # we'll handle the simple common cases)
+        for clause in mode_str.split(","):
+            clause = clause.strip()
+            if not clause:
+                continue
+
+            # Find the operator (+ or -)
+            op_idx = -1
+            for i, ch in enumerate(clause):
+                if ch in "+-=":
+                    op_idx = i
+                    break
+
+            if op_idx < 0:
+                raise ValueError(f"Unsupported mode: {mode_str}")
+
+            who = clause[:op_idx] if op_idx > 0 else "a"
+            operator = clause[op_idx]
+            perms = clause[op_idx + 1:]
+
+            if not perms:
+                raise ValueError(f"Unsupported mode: {mode_str}")
+
+            # Validate 'who' characters
+            if not all(c in "ugoa" for c in who):
+                raise ValueError(f"Unsupported mode: {mode_str}")
+
+            # Build the bitmask for the specified permissions
+            mask = 0
+            for p in perms:
+                if p == "r":
+                    if "u" in who or "a" in who:
+                        mask |= stat.S_IRUSR
+                    if "g" in who or "a" in who:
+                        mask |= stat.S_IRGRP
+                    if "o" in who or "a" in who:
+                        mask |= stat.S_IROTH
+                elif p == "w":
+                    if "u" in who or "a" in who:
+                        mask |= stat.S_IWUSR
+                    if "g" in who or "a" in who:
+                        mask |= stat.S_IWGRP
+                    if "o" in who or "a" in who:
+                        mask |= stat.S_IWOTH
+                elif p == "x":
+                    if "u" in who or "a" in who:
+                        mask |= stat.S_IXUSR
+                    if "g" in who or "a" in who:
+                        mask |= stat.S_IXGRP
+                    if "o" in who or "a" in who:
+                        mask |= stat.S_IXOTH
+                else:
+                    raise ValueError(f"Unsupported mode: {mode_str}")
+
+            if operator == "+":
+                current |= mask
+            elif operator == "-":
+                current &= ~mask
+            elif operator == "=":
+                # Clear existing bits for the specified who, then set
+                clear_mask = 0
+                if "u" in who or "a" in who:
+                    clear_mask |= stat.S_IRWXU
+                if "g" in who or "a" in who:
+                    clear_mask |= stat.S_IRWXG
+                if "o" in who or "a" in who:
+                    clear_mask |= stat.S_IRWXO
+                current = (current & ~clear_mask) | mask
 
         return current

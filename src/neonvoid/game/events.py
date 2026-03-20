@@ -34,11 +34,12 @@ class Trigger:
 
 
 def _file_read(filepath_contains: str):
-    """Create a condition that checks if a specific file was just read."""
+    """Create a condition that checks if a specific file was just read (case-insensitive)."""
     def check(state: GameState, cmd: str, args: list[str], output: str) -> bool:
         if cmd not in ("cat", "less", "more"):
             return False
-        return any(filepath_contains in arg for arg in args)
+        target = filepath_contains.lower()
+        return any(target in arg.lower() for arg in args)
     return check
 
 
@@ -52,11 +53,12 @@ def _command_with_pattern(cmd_name: str, pattern: str):
 
 
 def _entered_directory(dir_name: str):
-    """Create a condition that checks if player cd'd into a directory."""
+    """Create a condition that checks if player cd'd into a directory (case-insensitive)."""
     def check(state: GameState, cmd: str, args: list[str], output: str) -> bool:
         if cmd != "cd":
             return False
-        return any(dir_name in arg for arg in args)
+        target = dir_name.lower()
+        return any(target in arg.lower() for arg in args)
     return check
 
 
@@ -220,9 +222,9 @@ def build_triggers() -> list[Trigger]:
         ),
 
         Trigger(
-            name="bypassed_firewall",
+            name="read_firewall_rules",
             condition=_file_read("rules.conf"),
-            flags_to_set=[],  # Flag set by special firewall puzzle
+            flags_to_set=["read_firewall_rules"],
             narrative_key="act2_firewall_hint",
         ),
 

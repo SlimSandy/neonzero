@@ -275,6 +275,7 @@ class GameShell:
 
     def _handle_firewall_ctl(self, raw_input: str):
         """Handle the firewall-ctl command."""
+        self.state.record_command("firewall-ctl")
         parts = raw_input.split()[1:] if len(raw_input.split()) > 1 else []
         success, output = check_firewall_bypass(parts, self.state)
         print_output(output)

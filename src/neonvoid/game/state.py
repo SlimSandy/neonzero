@@ -42,6 +42,7 @@ class GameState:
     found_financial_evidence: bool = False
     reviewed_camera_logs: bool = False
     heard_voicemail: bool = False
+    read_firewall_rules: bool = False
     bypassed_firewall: bool = False
 
     # -- Act 3 flags --
